@@ -15,4 +15,6 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails", "~> 3.2.8"
+  s.add_dependency 'activerecord-sqlserver-adapter', "~> 3.2.8"
+  s.add_dependency 'tiny_tds'
 end

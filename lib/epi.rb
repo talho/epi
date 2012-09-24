@@ -17,8 +17,7 @@ $extensions_js = {} unless defined?($extensions_js)
 $extensions_js[:epi] = [ "rollcall/script_config.js" ]
 
 module Epi
-  module Models
-  end
+  autoload :Connection, 'epi/connection'
 end
 
 require "epi/engine"
