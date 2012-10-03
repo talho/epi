@@ -8,6 +8,8 @@ class Epi::RODS::ADT < ActiveRecord::Base
   self.primary_key = 'H_SID'
     
   def self.find_by_syndrome_name(str_or_array)
-    joins("JOIN symptom_coding ON sid = h_sid JOIN symptom_syndrome ON (symptom_0 & symptommask_0) > 0 OR (symptom_1 & symptommask_1) > 0").where("symptom_syndrome.syndrome_name" => str_or_array)
+    res = joins("JOIN symptom_coding ON sid = h_sid JOIN symptom_syndrome ON (symptom_0 & symptommask_0) > 0 OR (symptom_1 & symptommask_1) > 0")
+    res = res.where("symptom_syndrome.syndrome_name" => str_or_array) unless str_or_array.blank?
+    res
   end
 end

@@ -1,0 +1,7 @@
+
+midland_rods:
+  adapter: 'sqlserver',
+  host: '',
+  username: '',
+  password: '',
+  database: ''
