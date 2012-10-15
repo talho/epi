@@ -6,12 +6,9 @@ Talho.Epi.RODS.Controller = Ext.extend(Ext.util.Observable, {
   constructor: function(config){
     Ext.apply(this, config);
     
-    var panel = new Talho.Epi.RODS.view.Graphs({
-      closable: true,
-      title: 'RODS'
-    });
+    var panel = new Talho.Epi.RODS.view.Layout();
     this.getPanel = function(){
-      return panel
+      return panel;
     }
     
     Talho.Epi.RODS.Controller.superclass.constructor.apply(this, arguments);

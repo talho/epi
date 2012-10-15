@@ -1,1 +1,1 @@
-json.results @results.values
+json.results @results.respond_to?(:values) ? @results.values : @results
