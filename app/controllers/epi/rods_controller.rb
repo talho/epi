@@ -5,9 +5,16 @@ class Epi::RodsController < ApplicationController
   
   def search
     adt = Epi::RODS::ADT.connect(:midland_rods)
-    start_date = begin Date.parse(params[:start_date]) rescue 7.days.ago end
-    end_date = begin Date.parse(params[:end_date]) rescue Time.now end
-    adt = adt.where(h_date_admitted: start_date .. end_date) 
+    start_date = begin Date.parse(params[:start_date]).to_time.at_beginning_of_day.utc.change(hour:0) rescue 7.days.ago.to_time.change(hour:0) end
+    end_date = begin Date.parse(params[:end_date]).to_time.at_beginning_of_day.utc.change(hour:23, min: 59, sec: 59, usec: 999) rescue Time.now.utc.change(hour:23, min: 59, sec: 59, usec: 999) end
+    
+    # Filter based on param options
+    adt = adt.where(h_date_admitted: start_date .. end_date)
+    adt = adt.where(h_patient_age_grp_id: case params[:age] when 'a' then 'D' when 'c' then 'C' else nil end ) unless params[:age].blank?
+    adt = adt.where(h_patient_gender: params[:gender].upcase ) unless params[:gender].blank?
+    adt = adt.where(h_patient_addr_zipcd: params[:patient_zip]) unless params[:patient_zip].blank?
+    adt = adt.where(h_sndng_fclty: params[:facility]) unless params[:facility].blank?
+    
     adt = adt.group("DATEADD(d, DATEDIFF(d, 0, h_date_admitted),0)").order("DATEADD(d, DATEDIFF(d, 0, h_date_admitted),0)")
     unless params[:by_syndrome].blank?
       adt = adt.find_by_syndrome_name(params[:syndromes]).group("symptom_syndrome.syndrome_name").count
@@ -21,10 +28,8 @@ class Epi::RodsController < ApplicationController
     respond_with(@results)
   end
     
-  def options
-    ss = Epi::RODS::SymptomSyndrome.connect(:midland_rods)
-    respond_with(@options = {
-      syndromes: ss.syndrome_names
-    })
+  def providers
+    p = Epi::RODS::Provider.connect(:midland_rods)
+    respond_with(@providers = p.where(""))
   end
 end

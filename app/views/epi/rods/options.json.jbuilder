@@ -1,1 +1,0 @@
-json.syndroms @options[:syndromes]

@@ -8,6 +8,24 @@ Talho.Epi.RODS.view.Graphs = Ext.extend(Ext.Container, {
     defaultMargins: '0 10 0 0'
   },
   initComponent: function(){
+    this.totalStore = new Ext.data.JsonStore({
+      fields: [{name: 'date', type: 'date'}, 'total'],
+      url: '/epi/rods/search.json',
+      baseParams: {},
+      root: 'results',
+      restful: true,
+      autoLoad: true
+    });
+    
+    this.syndromeStore = new Ext.data.JsonStore({
+      fields: [{name: 'date', type: 'date'}, 'Constitutional', 'Fever', 'GI', 'ILI', 'Neurological', 'Respiratory'],
+      url: '/epi/rods/search.json',
+      baseParams: {'by_syndrome': true},
+      root: 'results',
+      restful: true,
+      autoLoad: true
+    });
+    
     this.items = [
       {xtype: 'panel',
        title: 'Total',
@@ -16,14 +34,7 @@ Talho.Epi.RODS.view.Graphs = Ext.extend(Ext.Container, {
        layout: 'fit',
        items: [
         new Talho.ux.Graph({
-          store: new Ext.data.JsonStore({
-            fields: [{name: 'date', type: 'date'}, 'total'],
-            url: '/epi/rods/search.json',
-            baseParams: {},
-            root: 'results',
-            restful: true,
-            autoLoad: true
-          }),
+          store: this.totalStore,
           xField: 'date',
           xDisplayName: 'Report Date',
           series: [{type: 'line', displayName: 'Total', yField: 'total', 
@@ -38,14 +49,7 @@ Talho.Epi.RODS.view.Graphs = Ext.extend(Ext.Container, {
        layout: 'fit',
        items: [
         new Talho.ux.Graph({
-          store: new Ext.data.JsonStore({
-            fields: [{name: 'date', type: 'date'}, 'Constitutional', 'Fever', 'GI', 'ILI', 'Neurological', 'Respiratory'],
-            url: '/epi/rods/search.json',
-            baseParams: {'by_syndrome': true},
-            root: 'results',
-            restful: true,
-            autoLoad: true
-          }),
+          store: this.syndromeStore,
           xField: 'date',
           showLegend: true,
           xDisplayName: 'Report Date',
@@ -75,4 +79,8 @@ Talho.Epi.RODS.view.Graphs = Ext.extend(Ext.Container, {
     
   },
   
+  load: function(params){
+    this.totalStore.load({params: Ext.apply({}, params)}); // load overwrites params so when we give it a reference to our params it's ruining it for everyone
+    this.syndromeStore.load({params: Ext.apply({}, params)});
+  }
 });

@@ -8,12 +8,14 @@ Talho.Epi.RODS.view.Layout = Ext.extend(Ext.Panel, {
   border: false,
   title: 'RODS',
   initComponent: function(){
+    this._index = new Talho.Epi.RODS.view.Index({});
+        
     this.cardPanel = new Ext.Panel({
       border: false,
       layout: 'card',
       region: 'center',
       activeItem: 0,
-      items: new Talho.Epi.RODS.view.Index({})
+      items: this._index
     });
     
     this.items = [
@@ -22,5 +24,11 @@ Talho.Epi.RODS.view.Layout = Ext.extend(Ext.Panel, {
     ]
     
     Talho.Epi.RODS.view.Layout.superclass.initComponent.apply(this, arguments);
+  },
+  
+  loadGraphs: function(params){
+    this._index.loadGraphs(params);
   }
 });
+
+Ext.reg('talho-epi-layout', Talho.Epi.RODS.view.Layout);
