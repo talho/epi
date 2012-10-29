@@ -1,8 +1,6 @@
 class Epi::RodsController < ApplicationController
   respond_to :json
   
-  skip_before_filter :authorize
-  
   def search
     adt = Epi::RODS::ADT.connect(:midland_rods)
     start_date = begin Date.parse(params[:start_date]).to_time.at_beginning_of_day.utc.change(hour:0) rescue 7.days.ago.to_time.change(hour:0) end

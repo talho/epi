@@ -53,7 +53,7 @@ Talho.Epi.RODS.view.Filters = Ext.extend(Ext.Container, {
   
   getBubbleTarget: function(){
     if(!this.layoutParent){ // bubble up to the layout class way up above
-      this.layoutParent = this.findParentByType('talho-epi-layout');
+      this.layoutParent = this.findParentByType('talho-epi-rods-layout');
     }
     return this.layoutParent;
   },

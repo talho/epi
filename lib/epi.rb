@@ -8,6 +8,11 @@ $menu_config[:epi] = <<EOF
   if current_user.has_non_public_role?('epi')
     nav = "{name: 'Epi-D', items:["
     nav += "{name: 'RODS', tab:{id: 'epi_rods', title:'RODS', initializer: 'Talho.Epi.RODS'}}"
+    if current_user.is_super_admin?("epi")
+      nav += ",{name: 'Admin', items: [
+        {name: 'Users', tab: {id: 'epi_users', title: 'Epi-D User Admin', initializer: 'Talho.Epi.Admin.Users'}}
+      ]}"
+    end
     nav += "]}"
   end
 EOF

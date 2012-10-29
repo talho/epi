@@ -31,4 +31,4 @@ Talho.Epi.RODS.view.Layout = Ext.extend(Ext.Panel, {
   }
 });
 
-Ext.reg('talho-epi-layout', Talho.Epi.RODS.view.Layout);
+Ext.reg('talho-epi-rods-layout', Talho.Epi.RODS.view.Layout);
