@@ -14,14 +14,14 @@ class Epi::Admin::UsersController < ApplicationController
   def update    
     raise "You must be a super admin to make changes to any User" unless current_user.is_super_admin?(:epi)
 
-    @detail = UserDetail.find_or_create_by_user_id(params[:id])
+    @detail = Epi::UserDetail.find_or_create_by_user_id(params[:id])
     @detail.update_attributes params[:user_detail]
     respond_with @detail
   end
   
   def facilities
     # connect to the database for the user that we're editing
-    @detail = UserDetail.find_or_create_by_user_id(params[:user_id])
+    @detail = Epi::UserDetail.find_or_create_by_user_id(params[:user_id])
     fac = Epi::RODS::Provider.connect(@detail.rods_database)
     # output all facilities, cross referenced by the ones that the user has access to
     respond_with(@facilities = fac.all, @user_facilities = @detail.rods_facilities.split(','))
