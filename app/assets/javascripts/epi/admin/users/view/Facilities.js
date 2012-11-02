@@ -3,10 +3,14 @@ Ext.ns("Talho.Epi.Admin.Users.view");
 
 Talho.Epi.Admin.Users.view.Facilities = Ext.extend(Ext.Panel, {
   layout: 'fit',
+  border: false,
   initComponent: function(){
-    var cbsm = new Ext.grid.CheckboxSelectionModel({checkOnly: true, singleSelect: false});
+    var cbsm = new Ext.grid.CheckboxSelectionModel({checkOnly: true, singleSelect: false, listeners: {scope: this, 'selectionchange': this.facility_selectionchange}});
     this.grid = new Ext.grid.GridPanel({store: new Ext.data.JsonStore({
-          fields: ['name', 'code', {name: 'selected', type: 'boolean'}],
+          url: '/epi/admin/users/facilities.json',
+          baseParams: {user_id: this.userId},
+          restful: true,
+          fields: ['name', 'id', {name: 'selected', type: 'boolean'}],
           listeners: {
             scope: this,
             load: this.store_load
@@ -20,11 +24,13 @@ Talho.Epi.Admin.Users.view.Facilities = Ext.extend(Ext.Panel, {
       this.grid
     ]
     
-    this.grid.on('afterrender', function(){
-      this.grid.getStore().loadData([{name: 'Midland Hospital', code: 'MSH', selected: false}, {name: 'Odessa Hospital', code: 'OSD', selected: true}]);
-    }, this, {delay: 10, single: true});
+    this.grid.on('afterrender', this.load, this, {delay: 10, single: true});
     
     Talho.Epi.Admin.Users.view.Facilities.superclass.initComponent.apply(this, arguments);
+  },
+  
+  load: function(){
+    this.grid.getStore().load();
   },
   
   store_load: function(store, records, options){
@@ -36,6 +42,19 @@ Talho.Epi.Admin.Users.view.Facilities = Ext.extend(Ext.Panel, {
       }
     }, this);
     
-    this.grid.getSelectionModel().selectRows(selected, true);
+    this.grid.getSelectionModel().suspendEvents();
+    this.grid.getSelectionModel().selectRows(selected);
+    this.grid.getSelectionModel().resumeEvents();
+  },
+  
+  facility_selectionchange: function(sm){
+    var selected = sm.getSelections(),
+        facilities = [];
+        
+    Ext.each(selected, function(sel){
+      facilities.push(sel.get('id'));
+    });
+    
+    this.fireEvent('userupdate', this.userId, {"user_detail[rods_facilities]": facilities.join(',')});
   }
 });

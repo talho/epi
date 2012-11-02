@@ -6,7 +6,7 @@ Openphin::Application.routes.draw do
     namespace :admin do
       resources :users, :only => [:index, :update] do
         collection do
-          get :databases
+          get :rods_databases
           get :facilities
         end
       end

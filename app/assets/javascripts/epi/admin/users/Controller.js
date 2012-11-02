@@ -23,9 +23,21 @@ Talho.Epi.Admin.Users.Controller = Ext.extend(Ext.util.Observable, {
       layout.items.last().destroy();
     }
     
-    layout.add(new Talho.Epi.Admin.Users.view.Details({flex: 1, userId: user_id, userName: name}));
-    layout.add(new Talho.Epi.Admin.Users.view.Facilities({flex: 1, userId: user_id, userName: name}));
+    this.detail = layout.add(new Talho.Epi.Admin.Users.view.Details({flex: 1, userId: user_id, userName: name, listeners: {scope: this, 'userupdate': this.user_update}}));
+    this.facilities = layout.add(new Talho.Epi.Admin.Users.view.Facilities({flex: 1, userId: user_id, userName: name, listeners: {scope: this, 'userupdate': this.user_update}}));
     layout.doLayout();
+  },
+  
+  user_update: function(userId, params){
+    Ext.Ajax.request({
+      url: '/epi/admin/users/' + userId + '.json',
+      method: 'PUT',
+      params: params,
+      success: function(){
+        this.facilities.load();
+      },
+      scope: this
+    });
   }
 });
 
