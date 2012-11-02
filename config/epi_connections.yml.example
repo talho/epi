@@ -1,7 +1,20 @@
-
 midland_rods:
-  adapter: 'sqlserver',
-  host: '',
-  username: '',
-  password: '',
-  database: ''
+  adapter: sqlserver
+  host: 192.168.30.98
+  username: rollcall
+  password: Talh0Talh0
+  database: rods-midland
+  
+austin_rods:
+  adapter: sqlserver
+  host: 192.168.30.98
+  username: rollcall
+  password: Talh0Talh0
+  database: rods-austin
+  
+netx_rods:
+  adapter: sqlserver
+  host: 192.168.30.98
+  username: rollcall
+  password: Talh0Talh0
+  database: rods-netx
