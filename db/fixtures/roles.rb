@@ -2,6 +2,7 @@ app = App.find_by_name('epi')
 
 Role.find_or_create_by_name_and_app_id("Public",app.id){|r| r.attributes = {:user_role => true, public: true} }
 Role.find_or_create_by_name_and_app_id("Admin",app.id){|r| r.attributes = {:user_role => false} }
+Role.find_or_create_by_name_and_app_id("Epidemiologist",app.id){|r| r.attributes = {:user_role => true, public: false} }
 # TODO
 # Integrate school selection into roles and/or user
 

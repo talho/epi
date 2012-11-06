@@ -2,8 +2,8 @@ class Epi::RodsController < ApplicationController
   respond_to :json
   
   def search
-    detail = Epi::UserDetail.find_or_create_by_user_id(current_user.id)
-    raise "You must designate a database for this user" if detail.rods_database.blank?
+    detail = Epi::UserDetail.find_by_user_id(current_user.id)
+    raise "You must designate a database for this user" if detail.blank? || detail.rods_database.blank?
     
     adt = Epi::RODS::ADT.connect(detail.rods_database)
     start_date = begin Date.parse(params[:start_date]).to_time.at_beginning_of_day.utc.change(hour:0) rescue 7.days.ago.to_time.change(hour:0) end
@@ -31,8 +31,8 @@ class Epi::RodsController < ApplicationController
   end
     
   def providers
-    detail = Epi::UserDetail.find_or_create_by_user_id(current_user.id)
-    raise "You must designate a database for this user" if detail.rods_database.blank?
+    detail = Epi::UserDetail.find_by_user_id(current_user.id)
+    raise "You must designate a database for this user" if detail.blank? || detail.rods_database.blank?
     
     p = Epi::RODS::Provider.connect(detail.rods_database)
     respond_with(@providers = p.where(p_pid: detail.rods_facilities.split(',')))
